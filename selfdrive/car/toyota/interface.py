@@ -70,8 +70,7 @@ class CarInterface(CarInterfaceBase):
       tire_stiffness_factor = 0.444  # not optimized yet
       ret.mass = 2860. * CV.LB_TO_KG + STD_CARGO_KG  # mean between normal and hybrid
       #set_lat_tune(ret.lateralTuning, LatTunes.PID_A)
-      set_lat_tune(ret.lateralTuning.init('model'), ret.lateralTuning.model.useRates = False )
-      ret.lateralTuning.model.name = "corolla_model_v5"
+      set_lat_tune(ret.lateralTuning, LatTunes.STEER_MODEL_COROLLA)
 
     elif candidate == CAR.LEXUS_RX:
       stop_and_go = True
