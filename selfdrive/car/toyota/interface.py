@@ -69,7 +69,9 @@ class CarInterface(CarInterfaceBase):
       ret.steerRatio = 18.27
       tire_stiffness_factor = 0.444  # not optimized yet
       ret.mass = 2860. * CV.LB_TO_KG + STD_CARGO_KG  # mean between normal and hybrid
-      set_lat_tune(ret.lateralTuning, LatTunes.PID_A)
+      #set_lat_tune(ret.lateralTuning, LatTunes.PID_A)
+      set_lat_tune(ret.lateralTuning.init('model'), ret.lateralTuning.model.useRates = False )
+      ret.lateralTuning.model.name = "corolla_model_v5"
 
     elif candidate == CAR.LEXUS_RX:
       stop_and_go = True
@@ -255,6 +257,10 @@ class CarInterface(CarInterfaceBase):
       ret.mass = 4305. * CV.LB_TO_KG + STD_CARGO_KG
       set_lat_tune(ret.lateralTuning, LatTunes.PID_J)
 
+    ret.lateralTuning.init('model')
+    ret.lateralTuning.model.name = "corolla_model_v5"
+    ret.lateralTuning.model.useRates = False
+    
     ret.steerRateCost = 0.5 if ret.hasZss else 1.0
     ret.centerToFront = ret.wheelbase * 0.44
 

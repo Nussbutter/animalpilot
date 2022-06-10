@@ -84,6 +84,19 @@ def set_lat_tune(tune, name):
     tune.lqr.k = [-110.73572306, 451.22718255]
     tune.lqr.l = [0.3233671, 0.3185757]
     tune.lqr.dcGain = 0.002237852961363602
+    
+   elif 'STEER_MODEL' in str(name):
+    tune.init('model')
+    tune.model.useRates = False  # TODO: makes model sluggish, see comments in latcontrol_model.py
+    tune.model.multiplier = 1.
+    
+    if name == LatTunes.STEER_MODEL_COROLLA:
+      tune.model.name = "corolla_model_v5"
+    elif name == LatTunes.STEER_MODEL_CAMRY:
+      tune.model.name = "camryh_tss2"
+      tune.model.useRates = False  # True
+    else:
+      raise NotImplementedError('This steering model does not exist')
 
   elif 'PID' in str(name):
     tune.init('pid')
@@ -145,3 +158,17 @@ def set_lat_tune(tune, name):
       raise NotImplementedError('This PID tune does not exist')
   else:
     raise NotImplementedError('This lateral tune does not exist')
+
+#no params, set to true
+  if true == true:
+    tune.init('model')
+    tune.model.name = 'corolla_model_v5'  # no camry
+    tune.model.useRates = False  # bool(params.TSS2)
+    tune.model.multiplier = 1.
+    # use kf from PID to calculate torque multiplier
+    # TODO: feed this into the model so it can extrapolate accurately
+    if tune.which() == 'pid':
+      # TSSP Corolla is actually 0.000069 but other cars are using stock tuning, so use stock 0.00003 for extrapolation
+      MODEL_CAR_KF = 0.00003 #no TSS2
+      if not np.isclose(tune.pid.kf, 0.):
+        tune.model.multiplier = tune.pid.kf / MODEL_CAR_KF
